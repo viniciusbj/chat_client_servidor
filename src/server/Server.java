@@ -34,18 +34,9 @@ public class Server implements Runnable {
 	public void deserializeMsg (String msg, User user) {
 		
 		String command = msg.split(":")[0];
-		
-		// envia mensagem para todos
-		if (msg.startsWith("SEND")) {
-			String msgToSend = user.getName();
-			msgToSend += msg.split(":")[1];
-			sendToAllUser(msgToSend, user);
-			
-			command += "\t Executado: Sim";
-			Main.printConsole(user.getName(), command);
-		}
+
 		// envia messagem para um cliente específico
-		else if (msg.startsWith("SENDTO")) {
+		if (msg.startsWith("SENDTO")) {
 			
 			// Procura cliente pelo nome
 			String receiverName = msg.split(":")[1];
@@ -63,6 +54,15 @@ public class Server implements Runnable {
 				command += "\t Executado: Sim";
 				Main.printConsole(user.getName(), command);
 			}
+		}
+		// envia mensagem para todos
+		else if (msg.startsWith("SEND")) {
+			String msgToSend = user.getName();
+			msgToSend += msg.split(":")[1];
+			sendToAllUser(msgToSend, user);
+
+			command += "\t Executado: Sim";
+			Main.printConsole(user.getName(), command);
 		}
 		// retorna quem está conectado
 		else if (msg.equals("WHO")) {
