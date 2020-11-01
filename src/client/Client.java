@@ -20,16 +20,19 @@ public class Client {
 			new sendCommand(command).start();
 		}
 		else if (command.equals("SEND") || command.equals("SENDTO")) {
-			int i = input.indexOf(' ');
+			int indexOfFirstSpace = input.indexOf(' ');
 			
 			if (command.equals("SENDTO")) {
-				int j = input.indexOf(' ', i);
-				String receiver = input.substring(i, j);
+				indexOfFirstSpace += 1;
+				int lengthOfReceiver = input.substring(indexOfFirstSpace).split(" ")[0].length();
+				int indexOfSecondSpace = input.indexOf(' ', lengthOfReceiver);
+
+				String receiver = input.substring(indexOfFirstSpace, indexOfSecondSpace);
 				command += ":"+receiver;
-				i = j;
+				indexOfFirstSpace = indexOfSecondSpace;
 			}
 			
-			String msg = input.substring(i);
+			String msg = input.substring(indexOfFirstSpace);
 			if (msg.length() > 0) {
 				new sendCommand(command+":"+msg).start();
 			} else {
