@@ -23,7 +23,7 @@ public class Server implements Runnable {
 			while (true) {
 				Socket User = servidor.accept();
 				users.add(new User(User, this));
-			}			
+			}
 		} catch (IOException e) {
 		}
 		for (User User: users) {
@@ -48,7 +48,7 @@ public class Server implements Runnable {
 				Main.printConsole(user.getName(), command);
 			} else {
 				String msgToSend = user.getName();
-				msgToSend += msg.split(":")[2];
+				msgToSend += ' ' + msg.split(":")[2];
 				sendToUser(msgToSend, receiver);
 				
 				command += "\t Executado: Sim";
@@ -84,7 +84,7 @@ public class Server implements Runnable {
 					+ "SEND: Envia mensagem para todos os clientes conectados.\n"
 					+ "SENDTO: Idêntico com SEND, porém envia a mensagem apenas para o cliente especificado.\n"
 					+ "WHO: Retorna a lista dos clientes conectados ao servidor.\n"
-					+ "HELP:Retorna a lista de comandos suportados e seu uso.\n"
+					+ "HELP: Retorna a lista de comandos suportados e seu uso.\n"
 			);
 			
 			command += "\t Executado: Sim";
@@ -107,6 +107,10 @@ public class Server implements Runnable {
 						+ "Falha ao conectar com servidor");
 				users.remove(user);
 			}
+		} else {
+			user.newMessage("ERRO: servidor não reconhece o comando.");
+			command += "\t Executado: Não";
+			Main.printConsole(user.getName(), command);
 		}
 	}
 

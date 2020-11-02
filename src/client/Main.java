@@ -19,9 +19,10 @@ public class Main {
 				
 				Client client = new Client(name, connection);
 				Scanner scanner = new Scanner(System.in);
-				while (true) {
+				while (client.isConnected) {
 					client.sendMsg(scanner.nextLine());
 				}
+				scanner.close();
 			} catch (Exception e) {
 				System.out.println(e);
 				System.err.println("Erro: não foi possível conectar com o servidor");
