@@ -7,11 +7,13 @@ import java.util.Scanner;
 
 public class Client {
 	private Socket connection;
+	public boolean isConnected;
 	
 	public Client (String name, Socket c) {
 		this.connection = c;
 		new listenServer().start();
 		new sendCommand("NAME:"+name).start();
+		isConnected = true;
 	}
 	
 	public void sendMsg (String input) {
@@ -24,12 +26,10 @@ public class Client {
 			
 			if (command.equals("SENDTO")) {
 				indexOfFirstSpace += 1;
-				int lengthOfReceiver = input.substring(indexOfFirstSpace).split(" ")[0].length();
-				int indexOfSecondSpace = input.indexOf(' ', lengthOfReceiver);
-
+				int indexOfSecondSpace = input.indexOf(' ', indexOfFirstSpace);
 				String receiver = input.substring(indexOfFirstSpace, indexOfSecondSpace);
 				command += ":"+receiver;
-				indexOfFirstSpace = indexOfSecondSpace;
+				indexOfFirstSpace = indexOfSecondSpace+1;
 			}
 			
 			String msg = input.substring(indexOfFirstSpace);
@@ -38,6 +38,11 @@ public class Client {
 			} else {
 				System.err.println("ERRO: espera-se uma mensagem a ser enviada no comando "+command);
 			}
+		} else {
+			System.err.println(
+				"ERRO: comando " + command + " não encontrado/n" +
+				"Digite HELP para saber as opções existentes."
+			);
 		}
 	}
 	
@@ -47,6 +52,7 @@ public class Client {
 	
 	private void disconect () {
 		try {
+			isConnected = false;
 			connection.close();
 		} catch (IOException e) {
 			System.err.println("ERRO: não foi possível fechar a conexão");
